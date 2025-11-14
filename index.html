@@ -4,117 +4,355 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bouncing Chromlings – Official Site</title>
-
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(180deg, #0A1628 0%, #0F1F3A 100%);
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at top, #1a2942, #0a1628);
             color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(110, 235, 255, 0.8), transparent);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 15s; }
+        .particle:nth-child(2) { left: 80%; top: 60%; animation-delay: 2s; animation-duration: 18s; }
+        .particle:nth-child(3) { left: 50%; top: 80%; animation-delay: 4s; animation-duration: 22s; }
+        .particle:nth-child(4) { left: 30%; top: 40%; animation-delay: 1s; animation-duration: 17s; }
+        .particle:nth-child(5) { left: 70%; top: 30%; animation-delay: 3s; animation-duration: 20s; }
+        .particle:nth-child(6) { left: 20%; top: 70%; animation-delay: 5s; animation-duration: 16s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            25% { transform: translate(30px, -30px) scale(1.3); opacity: 0.6; }
+            50% { transform: translate(-20px, -60px) scale(0.8); opacity: 0.4; }
+            75% { transform: translate(40px, -40px) scale(1.1); opacity: 0.5; }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
             text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
         }
-
+        
+        .logo-area {
+            margin-bottom: 20px;
+        }
+        
         .title {
-            font-size: 48px;
+            font-size: clamp(36px, 6vw, 64px);
             font-weight: 900;
-            margin-top: 40px;
-            background: linear-gradient(90deg, #6EEBFF, #9D7BFF);
+            background: linear-gradient(135deg, #6EEBFF 0%, #9D7BFF 50%, #FF6EEB 100%);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(100, 200, 255, 0.5);
+            background-clip: text;
+            animation: gradientShift 8s ease infinite, titleBounce 2s ease-in-out infinite;
+            letter-spacing: -1px;
+            text-shadow: 0 0 40px rgba(110, 235, 255, 0.3);
+            filter: drop-shadow(0 0 20px rgba(157, 123, 255, 0.4));
         }
-
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes titleBounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
         .subtitle {
-            font-size: 20px;
+            font-size: clamp(16px, 3vw, 22px);
             opacity: 0.85;
-            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-top: 10px;
+            animation: fadeIn 1s ease-out 0.3s both;
         }
-
+        
         .card {
-            max-width: 750px;
-            margin: 30px auto;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 18px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 0 25px rgba(0, 150, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            animation: fadeIn 0.8s ease-out;
+            margin: 40px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 150, 255, 0.15), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out both;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(110, 235, 255, 0.08) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 150, 255, 0.25),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        
         h2 {
-            font-size: 26px;
-            background: linear-gradient(90deg, #4DBBFF, #A883FF);
+            font-size: clamp(24px, 4vw, 32px);
+            background: linear-gradient(120deg, #4DBBFF, #A883FF, #FF6EEB);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
         }
-
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #6EEBFF, #9D7BFF);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(110, 235, 255, 0.5);
+        }
+        
         p {
             opacity: 0.9;
-            line-height: 1.6;
-            font-size: 17px;
-            padding: 0 10px;
+            line-height: 1.8;
+            font-size: clamp(15px, 2vw, 18px);
+            margin: 15px 0;
+            font-weight: 300;
         }
-
-        a {
+        
+        p strong {
             color: #6EEBFF;
-            font-weight: bold;
+            font-weight: 600;
+        }
+        
+        .link-button {
+            display: inline-block;
+            margin: 10px 5px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #6EEBFF, #9D7BFF);
+            color: white;
             text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(110, 235, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-
-        a:hover {
-            text-shadow: 0 0 10px #6EEBFF;
+        
+        .link-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
         }
-
+        
+        .link-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(110, 235, 255, 0.5);
+        }
+        
+        .link-button span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-item {
+            padding: 15px;
+            background: rgba(110, 235, 255, 0.05);
+            border-radius: 12px;
+            border-left: 3px solid #6EEBFF;
+            transition: all 0.3s ease;
+        }
+        
+        .info-item:hover {
+            background: rgba(110, 235, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
         footer {
-            margin-top: 60px;
-            padding: 25px;
-            opacity: 0.6;
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 20px;
+            opacity: 0.5;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-out 0.6s both;
         }
-
+        
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .card {
+                padding: 25px;
+                margin: 25px auto;
+            }
+            
+            header {
+                padding: 40px 20px 30px;
+            }
+            
+            .link-button {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="title">Bouncing Chromlings</div>
-    <div class="subtitle">Official Developer Website</div>
-
-    <div class="card">
-        <h2>About the Game</h2>
-        <p>
-            Bouncing Chromlings is a fast-paced arcade adventure where colorful Chromlings bounce 
-            through dynamic worlds, unlock regions, complete missions, and explore the vibrant map.
-            Developed and published by Bere2007.
-        </p>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
     </div>
-
-    <div class="card">
-        <h2>Developer Information</h2>
-        <p><strong>Developer:</strong> Bere2007</p>
-        <p><strong>Official Website:</strong><br>
-            bere2007.github.io/Bouncing-Chromlings
-        </p>
-        <p><strong>App Store Listing:</strong><br>
-            <a href="https://play.google.com/store/apps/details?id=nl.bartdebeer.bouncingchromlings">Open App  store</a>
-        </p>
+    
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <div class="title">Bouncing Chromlings</div>
+                <div class="subtitle">OFFICIAL DEVELOPER WEBSITE</div>
+            </div>
+        </header>
+        
+        <div class="card">
+            <h2>About the Game</h2>
+            <p>
+                Bouncing Chromlings is a fast-paced arcade adventure where colorful Chromlings bounce 
+                through dynamic worlds, unlock regions, complete missions, and explore the vibrant map. 
+                Experience a world of color, challenge, and endless fun!
+            </p>
+            <p>
+                Developed and published by <strong>Bere2007</strong>
+            </p>
+        </div>
+        
+        <div class="card">
+            <h2>Developer Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <p><strong>Developer:</strong> Bere2007</p>
+                </div>
+                <div class="info-item">
+                    <p><strong>Official Website:</strong><br>
+                    bere2007.github.io/Bouncing-Chromlings</p>
+                </div>
+            </div>
+            <div style="margin-top: 25px;">
+                <a href="https://play.google.com/store/apps/details?id=nl.bartdebeer.bouncingchromlings" class="link-button">
+                    <span>📱 Download on Play Store</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Privacy Policy</h2>
+            <p>
+                Your privacy is important to us. We are committed to protecting your personal information 
+                and being transparent about our data practices.
+            </p>
+            <div style="margin-top: 25px;">
+                <a href="https://sites.google.com/view/bouncingchromlings/privacybeleid" class="link-button">
+                    <span>🔒 Read Privacy Policy</span>
+                </a>
+            </div>
+        </div>
+        
+        <footer>
+            © 2025 Bouncing Chromlings – All Rights Reserved
+        </footer>
     </div>
-
-    <div class="card">
-        <h2>Privacy Policy</h2>
-        <p>
-            You can read our full Privacy Policy here:<br>
-            <a href=https://sites.google.com/view/bouncingchromlings/privacybeleid">Open Privacy Policy</a>
-        </p>
-    </div>
-
-    <footer>
-        © 2025 Bouncing Chromlings – All Rights Reserved
-    </footer>
-
 </body>
 </html>
